@@ -1,4 +1,4 @@
-name: PHP CI
+name: PHP CI/CD
 
 on:
   push:
@@ -16,11 +16,24 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: PHP Syntax Check
+      - name: Run PHP syntax check
         run: find public -name "*.php" -exec php -l {} \;
 
-      - name: Install PHP_CodeSniffer
-        run: composer global require "squizlabs/php_codesniffer=*"
+  deploy:
+    needs: php-lint
+    runs-on: ubuntu-latest
 
-      - name: Run PHP_CodeSniffer
-        run: ~/.composer/vendor/bin/phpcs --standard=phpcs.xml
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to Debian Server
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/html && git pull origin main"
