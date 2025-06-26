@@ -1,7 +1,9 @@
 name: PHP CI/CD
 
 on:
-  workflow_dispatch:  # ⬅️ Manual trigger only
+  push:
+    branches: [ "main" ]         # Auto-run tests on push
+  workflow_dispatch:              # Enable manual trigger for deploy
 
 jobs:
   php-lint:
@@ -19,7 +21,7 @@ jobs:
         run: find public -name "*.php" -exec php -l {} \;
 
   deploy:
-    needs: php-lint
+    if: github.event_name == 'workflow_dispatch'  # ⬅️ Only run on manual trigger
     runs-on: ubuntu-latest
 
     steps:
