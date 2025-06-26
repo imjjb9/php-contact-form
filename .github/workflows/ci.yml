@@ -36,4 +36,10 @@ jobs:
 
       - name: Deploy to Debian Server
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/html && git pull origin main"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            if [ ! -d /var/www/html/.git ]; then
+              git clone https://github.com/imjjb9/php-contact-form.git /var/www/html
+            else
+              cd /var/www/html && git pull origin main
+            fi
+          "
