@@ -36,4 +36,4 @@ jobs:
 
       - name: Deploy only public/ folder to server
         run: |
-          rsync -avz --delete --no-times -e "ssh -i ~/.ssh/id_ed25519" ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/
+          rsync -avz --delete --no-perms --no-owner --no-group --no-times -e "ssh -i ~/.ssh/id_ed25519" ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/html/
