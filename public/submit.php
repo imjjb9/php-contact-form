@@ -9,4 +9,3 @@ if (!$name || !$email || !$message) {
 
 // You could email this or save to a file/db
 echo "Thank you, $name. We received your message.";
-?>
