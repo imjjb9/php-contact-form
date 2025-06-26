@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<ruleset name="PHP Contact Form">
+    <rule ref="PSR12" />
+    <file>public/</file>
+</ruleset>
